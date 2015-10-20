@@ -338,6 +338,7 @@ public abstract class AbstractTank  implements Tank,Runnable {
 		while(!destroyed && !stopFlag) {
 			try {
 				scriptRun();
+				Thread.sleep(200);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

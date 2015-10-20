@@ -1,10 +1,7 @@
 package utl;
 
 import java.awt.Image;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
+import javax.swing.*;
 
 public class LoadPictures {
 
@@ -15,11 +12,11 @@ public class LoadPictures {
 	public LoadPictures() {
 		
 		try {
-			waterImage = ImageIO.read(new File("pictures/water.PNG"));
-			brickImage = ImageIO.read(new File("pictures/bricks.PNG"));
-			rockImage = ImageIO.read(new File("pictures/stone.PNG"));
-		} catch (IOException e) {
-			System.err.println("Can't find water image");
+			waterImage = new ImageIcon(getClass().getResource("/resources/pictures/water.PNG")).getImage();
+			brickImage = new ImageIcon(getClass().getResource("/resources/pictures/bricks.PNG")).getImage();
+			rockImage = new ImageIcon(getClass().getResource("/resources/pictures/stone.PNG")).getImage();
+		} catch (Exception e) {
+			System.err.println("Can't find landscape image");
 		}
 
 	}

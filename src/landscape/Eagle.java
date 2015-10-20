@@ -4,10 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.ImageObserver;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
+import javax.swing.*;
 
 import utl.Destroyable;
 
@@ -23,9 +20,9 @@ public class Eagle extends AbstractObstacle implements Destroyable {
 
 	private void setImages() {
 		try {
-			image = ImageIO.read(new File("pictures/staff.PNG").getAbsoluteFile());
-		} catch (IOException e) {
-			throw new IllegalStateException("Can't find tank images.");
+			image = new ImageIcon(getClass().getResource("/resources/pictures/staff.png")).getImage();
+		} catch (Exception e) {
+			throw new IllegalStateException("Can't find staff images.");
 		}
 	}
 

@@ -5,6 +5,7 @@ import utl.Direction;
 import utl.Drawable;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.ImageObserver;
 import java.io.File;
@@ -23,7 +24,8 @@ public class Detonation implements Drawable, Destroyable {
 
     public Detonation() {
         try {
-            image = ImageIO.read(new File("pictures/detonation.PNG"));
+            image = new ImageIcon(getClass().getResource("/resources/pictures/detonation.PNG")).getImage();
+//            image = ImageIO.read(new File("pictures/detonation.PNG"));
             destroy();
         } catch (Exception e) {
             e.printStackTrace();

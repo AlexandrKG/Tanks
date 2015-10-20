@@ -1,13 +1,11 @@
 package ui;
 
-
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
+
+import java.net.URL;
 
 public class AggressorChoicePanel extends JPanel {
 
@@ -114,18 +112,18 @@ public class AggressorChoicePanel extends JPanel {
     }
 
     private ImageIcon createImageIcon(String path) {
-        String filePath = "pictures/" + path;
-        Image image = null;
+        String filePath = "/resources/pictures/" + path;
+        URL url = null;
         try {
-            image = ImageIO.read(new File(filePath).getAbsoluteFile());
-            if (image != null) {
-                return new ImageIcon(image);
+            url = getClass().getResource(filePath);
+            if (url != null) {
+                return new ImageIcon(url);
             } else {
                 System.err.println("Couldn't find file: " + filePath);
                 return null;
             }
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;

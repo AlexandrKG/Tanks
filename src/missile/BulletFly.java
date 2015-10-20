@@ -6,7 +6,6 @@ import battle.BattleField;
 import tanks.AbstractTank;
 import tanks.Tiger;
 import utl.Direction;
-import utl.Sound;
 
 import static java.lang.Thread.sleep;
 
@@ -17,7 +16,7 @@ public class BulletFly  implements Runnable{
     protected AbstractTank target;
     protected AbstractTank hunter;
     protected final int STEP = 1;
-    protected final int SPEED = 3;
+    protected final int SPEED = 5;
     protected int rectangleSize;
 
     public BulletFly(AbstractTank tank,ActionField af) {
@@ -35,7 +34,7 @@ public class BulletFly  implements Runnable{
             while(true) {
                 if(hunter.getBullets() != null) {
                     for (Bullet b : hunter.getBullets()) {
-                        updateBulletCoordinates(b, STEP);
+                        updateBulletCoordinates(b, STEP*3);
                         if (processInterception(b)) {
                             hunter.getDetonation().initDetonation(b.getX(),b.getY(),b.getDirection());
                             af.fireSound.play();
@@ -43,7 +42,7 @@ public class BulletFly  implements Runnable{
                             b.destroy();
                         }
                     }
-                    sleep(SPEED);
+                    sleep(SPEED*3);
                 }
             }
         } catch (Exception e) {

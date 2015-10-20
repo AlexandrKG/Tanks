@@ -21,7 +21,7 @@ public class TankMove implements Runnable{
                 if (tank.isTankMooving()) {
                     moveOneSquare(tank);
                 }
-                Thread.sleep(10);
+                Thread.sleep(100);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -34,7 +34,8 @@ public class TankMove implements Runnable{
 
         int step = 1;
         int covered = 0;
-        while(covered < 64 && !tank.isDestroyed()) { //BattleField.RECT_SIZE
+        int size = BattleField.RECT_SIZE;
+        while(covered < size && !tank.isDestroyed()) {
             updateTankCoordinates(tank,1);
 //            System.out.println(tank.getStrRole() + "[ move to direction: "
 //                    + tank.getDirection() + " tankX: " + tank.getX()

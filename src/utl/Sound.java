@@ -1,6 +1,7 @@
 package utl;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -18,10 +19,11 @@ public class Sound {
 
     public Sound(String fileName) {
         File soundFile = new File(fileName);
-
+        URL url = getClass().getResource(fileName);
 
         try {
-            AudioInputStream stream = AudioSystem.getAudioInputStream(soundFile);
+//            AudioInputStream stream = AudioSystem.getAudioInputStream(soundFile);
+            AudioInputStream stream = AudioSystem.getAudioInputStream(url);
             clip = AudioSystem.getClip();
             clip.open(stream);
 

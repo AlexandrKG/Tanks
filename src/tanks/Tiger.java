@@ -2,11 +2,8 @@ package tanks;
 
 import java.awt.Color;
 import java.awt.Image;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
+import javax.swing.*;
 
-import utl.BattleFile;
 import utl.Direction;
 import battle.BattleField;
 
@@ -22,7 +19,7 @@ public class Tiger extends AbstractTank {
 		destroyableObst.add("E");	
 		setImages();
 		underwater = false;
-		speed = 15;
+		speed = 21;
 	}
 
 	public Tiger(BattleField bf, int x, int y,Direction direction) {
@@ -40,12 +37,12 @@ public class Tiger extends AbstractTank {
 	private void setImages() {
 		images = new Image[4];
 		try{
-			images[0] = ImageIO.read(new File("pictures/tiger-top.PNG").getAbsoluteFile());
-			images[1] = ImageIO.read(new File("pictures/tiger-bottom.PNG").getAbsoluteFile());
-			images[2] = ImageIO.read(new File("pictures/tiger-left.PNG").getAbsoluteFile());
-			images[3] = ImageIO.read(new File("pictures/tiger-right.PNG").getAbsoluteFile());
-		} catch(IOException e) {
-			throw new IllegalStateException("Can't find tank images.");
+			images[0] = new ImageIcon(getClass().getResource("/resources/pictures/tiger-top.PNG")).getImage();
+			images[1] = new ImageIcon(getClass().getResource("/resources/pictures/tiger-bottom.PNG")).getImage();
+			images[2] = new ImageIcon(getClass().getResource("/resources/pictures/tiger-left.PNG")).getImage();
+			images[3] = new ImageIcon(getClass().getResource("/resources/pictures/tiger-right.PNG")).getImage();
+		} catch(Exception e) {
+			throw new IllegalStateException("Can't find tiger images.");
 		}
 	}
 

@@ -1,0 +1,87 @@
+#BattleField
+[W,  B,  W,   ,   ,  B,  R,  R,  W]
+[ ,  W,   ,  B,  W,   ,  B,   ,   ]
+[ ,   ,  B,  W,   ,   ,  W,  B,   ]
+[W,  R,  R,  R,   ,  B,   ,   ,  W]
+[W,   ,  W,   ,  R,  B,  B,  R,  B]
+[ ,  R,   ,  W,  E,  W,   ,  W,  R]
+[W,  R,  W,  R,  W,   ,  R,  B,   ]
+[B,   ,  R,  W,   ,  W,   ,  W,  W]
+[ ,   ,  W,  W,  W,   ,  B,   ,  R]
+#aggressor
+BT7
+[192 ; 0]
+TOP
+#defender
+Tiger
+[384 ; 320]
+TOP
+#aggressor
+TURN_BOTTOM
+#aggressor
+FIRE
+#aggressor
+MOVE
+#aggressor
+START_SCRIPT
+#aggressor
+TURN_BOTTOM
+#defender
+FIRE
+#aggressor
+MOVE
+#aggressor
+START_SCRIPT
+#defender
+TURN_TOP
+#defender
+MOVE
+#aggressor
+TURN_RIGHT
+#aggressor
+MOVE
+#aggressor
+START_SCRIPT
+#aggressor
+TURN_BOTTOM
+#defender
+TURN_LEFT
+#defender
+MOVE
+#aggressor
+MOVE
+#defender
+FIRE
+#aggressor
+START_SCRIPT
+#aggressor
+TURN_RIGHT
+#aggressor
+FIRE
+#defender
+FIRE
+#aggressor
+MOVE
+#aggressor
+START_SCRIPT
+#aggressor
+TURN_BOTTOM
+#aggressor
+MOVE
+#aggressor
+START_SCRIPT
+#aggressor
+TURN_BOTTOM
+#aggressor
+MOVE
+#aggressor
+START_SCRIPT
+#aggressor
+TURN_LEFT
+#defender
+TURN_LEFT
+#defender
+MOVE
+#aggressor
+FIRE
+STOP_GAME

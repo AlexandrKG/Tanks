@@ -25,10 +25,10 @@ public class ActionField extends JPanel implements Runnable {
     public Result result;
     public volatile boolean stopFlag = false;
     private long lastPressProcessed = 0;
-    private ArrayList<ActionInQueue> QueueActs;
+    private ArrayList<ActionInQueue> queueActs;
     private volatile boolean pauseFlag = false;
     private boolean repeatGameFlag = false;
-    public Sound fireSound = new Sound("sounds/bomb.wav");
+    public Sound fireSound = new Sound("/resources/sounds/bomb.wav");
 
 
     public ActionField(AbstractTank aggressor,AbstractTank defender) throws Exception {
@@ -37,7 +37,7 @@ public class ActionField extends JPanel implements Runnable {
         battleField = new BattleField();
         battleFile = new BattleFile();
         initTanks();
-        QueueActs = new ArrayList<>();
+        queueActs = new ArrayList<>();
         result = new Result();
         initListner();
     }
@@ -50,19 +50,19 @@ public class ActionField extends JPanel implements Runnable {
                     try {
                         if (System.currentTimeMillis() - lastPressProcessed > 300) {
                             if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-                                QueueActs.add(new ActionInQueue(defender, Action.FIRE));
+                                queueActs.add(new ActionInQueue(defender, Action.FIRE));
                             } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-                                QueueActs.add(new ActionInQueue(defender, Action.TURN_BOTTOM));
-                                QueueActs.add(new ActionInQueue(defender, Action.MOVE));
+                                queueActs.add(new ActionInQueue(defender, Action.TURN_BOTTOM));
+                                queueActs.add(new ActionInQueue(defender, Action.MOVE));
                             } else if (e.getKeyCode() == KeyEvent.VK_UP) {
-                                QueueActs.add(new ActionInQueue(defender, Action.TURN_TOP));
-                                QueueActs.add(new ActionInQueue(defender, Action.MOVE));
+                                queueActs.add(new ActionInQueue(defender, Action.TURN_TOP));
+                                queueActs.add(new ActionInQueue(defender, Action.MOVE));
                             } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-                                QueueActs.add(new ActionInQueue(defender, Action.TURN_RIGHT));
-                                QueueActs.add(new ActionInQueue(defender, Action.MOVE));
+                                queueActs.add(new ActionInQueue(defender, Action.TURN_RIGHT));
+                                queueActs.add(new ActionInQueue(defender, Action.MOVE));
                             } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-                                QueueActs.add(new ActionInQueue(defender, Action.TURN_LEFT));
-                                QueueActs.add(new ActionInQueue(defender, Action.MOVE));
+                                queueActs.add(new ActionInQueue(defender, Action.TURN_LEFT));
+                                queueActs.add(new ActionInQueue(defender, Action.MOVE));
                             } else if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
                                 if (pauseFlag) {
                                     pauseFlag = false;
@@ -83,7 +83,7 @@ public class ActionField extends JPanel implements Runnable {
     }
 
     public void restartActionField(AbstractTank aggressor,AbstractTank defender) throws Exception {
-        QueueActs.clear();
+        queueActs.clear();
         this.aggressor = aggressor;
         this.defender = defender;
         battleField.restartButtleField();
@@ -94,7 +94,7 @@ public class ActionField extends JPanel implements Runnable {
     }
 
     public void repeatActionField() {
-        QueueActs.clear();
+        queueActs.clear();
         battleFile.readBattle(this);
         aggressor.setRole(new TotalRecall(aggressor));
         defender.setRole(new TotalRecall(defender));
@@ -205,7 +205,7 @@ public class ActionField extends JPanel implements Runnable {
 
     private ActionInQueue getQueueElement() {
         ActionInQueue result = null;
-        if (QueueActs != null && !QueueActs.isEmpty()) {
+        if (queueActs != null && !queueActs.isEmpty()) {
             if(repeatGameFlag) {
                 result = elementRepeatGame();
             } else {
@@ -217,10 +217,10 @@ public class ActionField extends JPanel implements Runnable {
 
     private ActionInQueue elementNewGame() {
         ActionInQueue result = null;
-        for (int i = 0; i < QueueActs.size(); i++) {
-            result = QueueActs.get(i);
+        for (int i = 0; i < queueActs.size(); i++) {
+            result = queueActs.get(i);
             if (!result.getTank().isTankMooving()) {
-                QueueActs.remove(i);
+                queueActs.remove(i);
                 break;
             }
             result = null;
@@ -231,8 +231,8 @@ public class ActionField extends JPanel implements Runnable {
     private ActionInQueue elementRepeatGame() {
         ActionInQueue result = null;
         if (!defender.isTankMooving() && !aggressor.isTankMooving()) {
-            result = QueueActs.get(0);
-            QueueActs.remove(0);
+            result = queueActs.get(0);
+            queueActs.remove(0);
         }
         return result;
     }
@@ -240,13 +240,13 @@ public class ActionField extends JPanel implements Runnable {
     private void setQueueElement(AbstractTank tank) throws Exception {
         Action act = tank.setUp();
         if (act != null && act != Action.NONE) {
-            QueueActs.add(new ActionInQueue(tank, act));
+            queueActs.add(new ActionInQueue(tank, act));
         }
 
     }
 
     private void updateQueue() throws Exception {
-        if (QueueActs.isEmpty()) {
+        if (queueActs.isEmpty()) {
             setQueueElement(aggressor);
             setQueueElement(defender);
         }
@@ -271,7 +271,7 @@ public class ActionField extends JPanel implements Runnable {
                                     processAction(element.getAct(), element.getTank());
                                 }
                             }
-                            sleep(100);
+                            sleep(200);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -295,7 +295,7 @@ public class ActionField extends JPanel implements Runnable {
             try {
                 this.requestFocus();
                 repaint();
-                sleep(10);
+                sleep(16);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -458,7 +458,7 @@ public class ActionField extends JPanel implements Runnable {
     }
 
     public ArrayList<ActionInQueue> getQueueActs() {
-        return QueueActs;
+        return queueActs;
     }
 
 }

@@ -14,7 +14,7 @@ public class Bullet  implements Drawable,Destroyable{
 	private Direction direction;
 	private int x;
 	private int y;
-	private int speed = 3;
+	private int speed = 5;
 	public final static int BULLET_SIZE = 6;
 	public final static int RECT_SIZE = BattleField.RECT_SIZE;
 	protected Color bulletColor;
