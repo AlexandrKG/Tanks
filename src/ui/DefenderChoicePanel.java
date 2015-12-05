@@ -27,7 +27,7 @@ public class DefenderChoicePanel  extends JPanel {
 
         this.setLayout(new GridBagLayout());
 
-        JLabel lProducts = new JLabel("CHOICE TANKS:");
+        JLabel lProducts = new JLabel("CHOICE DEFENDER:");
         final ButtonGroup group = new ButtonGroup();
 
         JPanel radioPanel = new JPanel();

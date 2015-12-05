@@ -1,20 +1,20 @@
 #BattleField
-[W,  B,  W,   ,   ,  B,  R,  R,  W]
-[ ,  W,   ,  B,  W,   ,  B,   ,   ]
-[ ,   ,  B,  W,   ,   ,  W,  B,   ]
-[W,  R,  R,  R,   ,  B,   ,   ,  W]
-[W,   ,  W,   ,  R,  B,  B,  R,  B]
-[ ,  R,   ,  W,  E,  W,   ,  W,  R]
-[W,  R,  W,  R,  W,   ,  R,  B,   ]
-[B,   ,  R,  W,   ,  W,   ,  W,  W]
-[ ,   ,  W,  W,  W,   ,  B,   ,  R]
+[ ,  ,  ,  ,  ,  ,  ,  ,  ]
+[ , R, W, W, W, B, W, B, B]
+[ , W, W, R, R, W, W, B, W]
+[ ,  ,  ,  ,  ,  ,  ,  ,  ]
+[W, B, W, R, R, R, B, R,  ]
+[W, W, R, R, W, B, R, R,  ]
+[W, W, B, B, W,  ,  ,  ,  ]
+[R, W, R,  ,  ,  , B, B, B]
+[W, R, W,  , E,  , B, W, B]
 #aggressor
-BT7
-[192 ; 0]
-TOP
-#defender
 Tiger
-[384 ; 320]
+[512 ; 0]
+TOP
+#defender
+T34
+[192 ; 512]
 TOP
 #aggressor
 TURN_BOTTOM
@@ -25,63 +25,75 @@ MOVE
 #aggressor
 START_SCRIPT
 #aggressor
-TURN_BOTTOM
-#defender
+TURN_LEFT
+#aggressor
 FIRE
 #aggressor
 MOVE
 #aggressor
 START_SCRIPT
+#aggressor
+TURN_BOTTOM
+#aggressor
+FIRE
+#aggressor
+MOVE
+#aggressor
+START_SCRIPT
+#aggressor
+TURN_BOTTOM
+#aggressor
+MOVE
+#aggressor
+START_SCRIPT
+#aggressor
+TURN_BOTTOM
+#aggressor
+FIRE
+#aggressor
+MOVE
+#aggressor
+START_SCRIPT
+#aggressor
+TURN_BOTTOM
+#aggressor
+FIRE
+#aggressor
+MOVE
+#aggressor
+START_SCRIPT
+#aggressor
+TURN_BOTTOM
+#aggressor
+MOVE
+#aggressor
+START_SCRIPT
+#aggressor
+TURN_BOTTOM
+#aggressor
+FIRE
 #defender
 TURN_TOP
 #defender
 MOVE
 #aggressor
+MOVE
+#defender
 TURN_RIGHT
-#aggressor
+#defender
 MOVE
 #aggressor
 START_SCRIPT
 #aggressor
-TURN_BOTTOM
-#defender
 TURN_LEFT
-#defender
-MOVE
+#aggressor
+FIRE
 #aggressor
 MOVE
 #defender
 FIRE
 #aggressor
 START_SCRIPT
-#aggressor
-TURN_RIGHT
-#aggressor
-FIRE
 #defender
-FIRE
-#aggressor
-MOVE
-#aggressor
-START_SCRIPT
-#aggressor
-TURN_BOTTOM
-#aggressor
-MOVE
-#aggressor
-START_SCRIPT
-#aggressor
-TURN_BOTTOM
-#aggressor
-MOVE
-#aggressor
-START_SCRIPT
-#aggressor
-TURN_LEFT
-#defender
-TURN_LEFT
-#defender
-MOVE
-#aggressor
 FIRE
 STOP_GAME

@@ -27,11 +27,15 @@ public class BattleField implements Drawable {
 	private List<AbstractObstacle> obst;
 	private Eagle staff;
 	private LoadPictures loadPictures;
+	private int[][] staffBlocks;
+	private int[][] aggressorStartPosition;
 
 	public BattleField() {
 		loadPictures = new LoadPictures();
 		battleField = new String[RECT_NUMBER_Y][RECT_NUMBER_X];
 		obst = new ArrayList<>();
+		staffBlocks = new int[5][2];
+		aggressorStartPosition= new int[1][2];
 		staff = new Eagle();
 		initButtleField();
 	}
@@ -55,6 +59,7 @@ public class BattleField implements Drawable {
 				initObstacles(battleField[v][h], v, h);
 			}
 		}
+		setFreePath(randomInit(3));
 		initStaff();
 	}
 
@@ -66,9 +71,16 @@ public class BattleField implements Drawable {
 		}
 	}
 
-	private String bfRandom() {
+	private int randomInit(int bound) {
 		Random r = new Random();
-		int i = r.nextInt(4);
+		return r.nextInt(bound);
+	}
+
+	private String bfRandom() {
+		int i = randomInit(4);
+		if(i == 0) {
+			i = 3;
+		}
 		if (i == 0) {
 			return " ";
 		} else if (i == 1) {
@@ -81,10 +93,9 @@ public class BattleField implements Drawable {
 	}
 
 	private void initStaff() {
-		Random r = new Random();
-		int h = r.nextInt(RECT_NUMBER_X);
-		int v = r.nextInt(RECT_NUMBER_Y);
-		cleanQuadrant(v, h);
+		setStaffBlocks();
+		int h = RECT_NUMBER_X/2;
+		int v = RECT_NUMBER_Y - 1;
 		battleField[v][h] = "E";
 
 		int y = v * RECT_SIZE;
@@ -96,6 +107,72 @@ public class BattleField implements Drawable {
 		staff.setDestroyed(false);
 		int index = v * RECT_NUMBER_X + h;
 		obst.set(index, staff);
+	}
+
+	private void setStaffBlocks(){
+		int i = 0;
+		for (int v = RECT_NUMBER_Y-2; v < RECT_NUMBER_Y; v++) {
+			for (int h = RECT_NUMBER_X/2-1; h < RECT_NUMBER_X/2+2; h++) {
+				cleanQuadrant(v, h);
+				if(!(v==RECT_NUMBER_Y-1 && h==RECT_NUMBER_X/2)) {
+					staffBlocks[i][0] = v;
+					staffBlocks[i][1] = h;
+					i++;
+				}
+			}
+		}
+
+	}
+
+	private void setFreePath(int pathVersion) {
+
+		switch (pathVersion) {
+			case 0:
+				cleanHLine(0,RECT_NUMBER_X,0);
+				cleanHLine(0,RECT_NUMBER_X,3);
+				cleanHLine(0,RECT_NUMBER_X/2,6);
+				cleanVLine(1, 3, RECT_NUMBER_X - 1);
+				cleanVLine(4,6,0);
+				aggressorStartPosition[0][0] = 0;
+				aggressorStartPosition[0][1] = 0;
+				break;
+			case 1:
+				cleanHLine(0,RECT_NUMBER_X,0);
+				cleanHLine(0,RECT_NUMBER_X,3);
+				cleanHLine(RECT_NUMBER_X/2 + 1,RECT_NUMBER_X,6);
+				cleanVLine(1,3,0);
+				cleanVLine(4,6,RECT_NUMBER_X - 1);
+				aggressorStartPosition[0][0] = 0;
+				aggressorStartPosition[0][1] = RECT_NUMBER_X - 1;
+				break;
+			case 2:
+				cleanVLine(0, 4, 0);
+				cleanHLine(1, 4, 3);
+				cleanVLine(0, 3, 3);
+				cleanHLine(4, RECT_NUMBER_X, 0);
+				cleanVLine(0, 4, RECT_NUMBER_X - 1);
+				cleanHLine(5, RECT_NUMBER_X - 1, 3);
+				cleanVLine(4, 6, 5);
+				cleanHLine(1, 5, 5);
+				cleanVLine(5, RECT_NUMBER_X, 1);
+				cleanHLine(2, 3, RECT_NUMBER_X - 1);
+				aggressorStartPosition[0][0] = 0;
+				aggressorStartPosition[0][1] = 0;
+				break;
+		}
+
+	}
+
+	private void cleanHLine(int start, int end, int line) {
+		for (int h = start; h < end; h++) {
+			cleanQuadrant(line, h);
+		}
+	}
+
+	private void cleanVLine(int start, int end, int column) {
+		for (int v = start; v < end; v++) {
+			cleanQuadrant(v, column);
+		}
 	}
 
 	private void initObstacles(String data, int v, int h) {
@@ -205,4 +282,11 @@ public class BattleField implements Drawable {
 		return battleField;
 	}
 
+	public int[][] getStaffBlocks() {
+		return staffBlocks;
+	}
+
+	public int[][] getAggressorStartPosition() {
+		return aggressorStartPosition;
+	}
 }

@@ -104,27 +104,14 @@ public class ActionField extends JPanel implements Runnable {
     }
 
     private void initTanks() {
+        initDefender();
+        initAggressor();
+    }
 
-        int vDefender;
-        int hDefender;
-
-        do {
-            vDefender = randomInit(battleField.getDimentionY());
-            hDefender = randomInit(battleField.getDimentionX());
-        } while (hDefender == battleField.getStaff().getH()
-                && vDefender == battleField.getStaff().getV());
-        int vAggressor;
-        int hAggressor;
-        do {
-            vAggressor = randomInit(battleField.getDimentionY());
-            hAggressor = randomInit(battleField.getDimentionX());
-
-        } while ((vAggressor == vDefender && hAggressor == hDefender)
-                || (hAggressor == battleField.getStaff().getH()
-                && vAggressor == battleField.getStaff().getV()));
-
-        battleField.cleanQuadrant(vDefender, hDefender);
-        battleField.cleanQuadrant(vAggressor, hAggressor);
+    private void initDefender() {
+        int freeBlock = randomInit(5);
+        int vDefender = battleField.getStaffBlocks()[freeBlock][0];
+        int hDefender = battleField.getStaffBlocks()[freeBlock][1];
 
         int x = hDefender * battleField.RECT_SIZE;
         int y = vDefender * battleField.RECT_SIZE;
@@ -133,29 +120,35 @@ public class ActionField extends JPanel implements Runnable {
         } else {
             this.defender.installTank(battleField, x, y, Direction.TOP);
         }
-        this.defender.setRole(new ManuaControl(this.defender));
+        this.defender.setRole(new ManualControl(this.defender));
+        defender.setTarget(this.aggressor);
+        defender.getRole().installData();
+        if (defender.getDestroyableObst().contains("E")) {
+            defender.getDestroyableObst().remove("E");
+        }
+        defender.setDestroyed(false);
+        defender.setStrRole("defender");
+        defender.stopFlag = false;
+    }
 
-        x = hAggressor * battleField.RECT_SIZE;
-        y = vAggressor * battleField.RECT_SIZE;
+    private void initAggressor() {
+        int vAggressor = battleField.getAggressorStartPosition()[0][0];
+        int hAggressor = battleField.getAggressorStartPosition()[0][1];
+
+//        battleField.cleanQuadrant(vAggressor, hAggressor);
+        int x = hAggressor * battleField.RECT_SIZE;
+        int y = vAggressor * battleField.RECT_SIZE;
         if (this.aggressor == null) {
             this.aggressor = new BT7(battleField, x, y, Direction.TOP);
             this.aggressor.setRole(new RandomTank(this.aggressor));
         } else {
             this.aggressor.installTank(battleField, x, y, Direction.TOP);
         }
-        defender.setTarget(this.aggressor);
         aggressor.setTarget(defender);
         aggressor.getRole().installData();
-        defender.getRole().installData();
-        if (defender.getDestroyableObst().contains("E")) {
-            defender.getDestroyableObst().remove("E");
-        }
         aggressor.setDestroyed(false);
-        defender.setDestroyed(false);
         aggressor.setStrRole("aggressor");
-        defender.setStrRole("defender");
         aggressor.stopFlag = false;
-        defender.stopFlag = false;
     }
 
     private int randomInit(int bound) {
