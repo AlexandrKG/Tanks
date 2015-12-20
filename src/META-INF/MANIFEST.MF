@@ -1,4 +1,4 @@
 Manifest-Version: 1.0
 SplashScreen-Image: pictures/splash.PNG
-Main-Class: ui.Launcher
+Main-Class: battle.Launcher
 

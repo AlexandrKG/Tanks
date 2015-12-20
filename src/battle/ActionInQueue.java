@@ -1,9 +1,8 @@
 package battle;
 
 
-import tanks.AbstractTank;
-import tanks.Action;
-import utl.Direction;
+import battle.tanks.AbstractTank;
+import battle.tanks.Action;
 
 public class ActionInQueue {
 

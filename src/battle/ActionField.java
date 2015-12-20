@@ -9,8 +9,12 @@ import java.util.Random;
 
 import javax.swing.JPanel;
 
-import missile.*;
-import tanks.*;
+import battle.missile.Bullet;
+import battle.missile.BulletFly;
+import battle.tanks.*;
+import battle.tanks.scripts.ManualControl;
+import battle.tanks.scripts.RandomTank;
+import battle.tanks.scripts.TotalRecall;
 import ui.Result;
 import utl.*;
 
@@ -24,7 +28,6 @@ public class ActionField extends JPanel implements Runnable {
     private BattleFile battleFile;
     public Result result;
     public volatile boolean stopFlag = false;
-    private long lastPressProcessed = 0;
     private ArrayList<ActionInQueue> queueActs;
     private volatile boolean pauseFlag = false;
     private boolean repeatGameFlag = false;
@@ -43,42 +46,78 @@ public class ActionField extends JPanel implements Runnable {
     }
 
     private void initListner() {
-        if (!defender.isRobot()) {
+        if (!defender.isRobot() || !aggressor.isRobot()) {
             addKeyListener(new KeyAdapter() {
                 @Override
                 public void keyReleased(KeyEvent e) {
                     try {
-                        if (System.currentTimeMillis() - lastPressProcessed > 300) {
-                            if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-                                queueActs.add(new ActionInQueue(defender, Action.FIRE));
-                            } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-                                queueActs.add(new ActionInQueue(defender, Action.TURN_BOTTOM));
-                                queueActs.add(new ActionInQueue(defender, Action.MOVE));
-                            } else if (e.getKeyCode() == KeyEvent.VK_UP) {
-                                queueActs.add(new ActionInQueue(defender, Action.TURN_TOP));
-                                queueActs.add(new ActionInQueue(defender, Action.MOVE));
-                            } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-                                queueActs.add(new ActionInQueue(defender, Action.TURN_RIGHT));
-                                queueActs.add(new ActionInQueue(defender, Action.MOVE));
-                            } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-                                queueActs.add(new ActionInQueue(defender, Action.TURN_LEFT));
-                                queueActs.add(new ActionInQueue(defender, Action.MOVE));
-                            } else if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
-                                if (pauseFlag) {
-                                    pauseFlag = false;
-                                    System.err.println("PAUSE START");
-                                } else {
-                                    pauseFlag = true;
-                                    System.err.println("PAUSE END");
-                                }
-                            }
-                            lastPressProcessed = System.currentTimeMillis();
+                        if(e.getKeyCode() == KeyEvent.VK_W || e.getKeyCode() == KeyEvent.VK_S ||
+                                e.getKeyCode() == KeyEvent.VK_A || e.getKeyCode() == KeyEvent.VK_D ||
+                                e.getKeyCode() == KeyEvent.VK_X) {
+                            aggressorKeyControl(e);
+                        } else {
+                            defenderKeyControl(e);
                         }
                     } catch (Exception e1) {
                         e1.printStackTrace();
                     }
                 }
             });
+        }
+    }
+
+    private void defenderKeyControl(KeyEvent e) {
+        if (!defender.isRobot()) {
+            if (System.currentTimeMillis() - defender.getLastPressProcessed() > 300) {
+                if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+                    queueActs.add(new ActionInQueue(defender, Action.FIRE));
+                } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+                    queueActs.add(new ActionInQueue(defender, Action.TURN_BOTTOM));
+                    queueActs.add(new ActionInQueue(defender, Action.MOVE));
+                } else if (e.getKeyCode() == KeyEvent.VK_UP) {
+                    queueActs.add(new ActionInQueue(defender, Action.TURN_TOP));
+                    queueActs.add(new ActionInQueue(defender, Action.MOVE));
+                } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+                    queueActs.add(new ActionInQueue(defender, Action.TURN_RIGHT));
+                    queueActs.add(new ActionInQueue(defender, Action.MOVE));
+                } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+                    queueActs.add(new ActionInQueue(defender, Action.TURN_LEFT));
+                    queueActs.add(new ActionInQueue(defender, Action.MOVE));
+                } else if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
+                    if (pauseFlag) {
+                        pauseFlag = false;
+                        System.err.println("PAUSE START");
+                    } else {
+                        pauseFlag = true;
+                        System.err.println("PAUSE END");
+                    }
+                }
+                defender.setLastPressProcessed(System.currentTimeMillis());
+            }
+        }
+    }
+
+    private void aggressorKeyControl(KeyEvent e) {
+        if (!aggressor.isRobot()) {
+            if (System.currentTimeMillis() - aggressor.getLastPressProcessed() > 300) {
+                if (e.getKeyCode() == KeyEvent.VK_X) {
+                    queueActs.add(new ActionInQueue(aggressor, Action.FIRE));
+                } else if (e.getKeyCode() == KeyEvent.VK_S) {
+                    queueActs.add(new ActionInQueue(aggressor, Action.TURN_BOTTOM));
+                    queueActs.add(new ActionInQueue(aggressor, Action.MOVE));
+                    System.out.println("queueActs size is " +  queueActs.size());
+                } else if (e.getKeyCode() == KeyEvent.VK_W) {
+                    queueActs.add(new ActionInQueue(aggressor, Action.TURN_TOP));
+                    queueActs.add(new ActionInQueue(aggressor, Action.MOVE));
+                } else if (e.getKeyCode() == KeyEvent.VK_D) {
+                    queueActs.add(new ActionInQueue(aggressor, Action.TURN_RIGHT));
+                    queueActs.add(new ActionInQueue(aggressor, Action.MOVE));
+                } else if (e.getKeyCode() == KeyEvent.VK_A) {
+                    queueActs.add(new ActionInQueue(aggressor, Action.TURN_LEFT));
+                    queueActs.add(new ActionInQueue(aggressor, Action.MOVE));
+                }
+                aggressor.setLastPressProcessed(System.currentTimeMillis());
+            }
         }
     }
 
@@ -96,8 +135,8 @@ public class ActionField extends JPanel implements Runnable {
     public void repeatActionField() {
         queueActs.clear();
         battleFile.readBattle(this);
-        aggressor.setRole(new TotalRecall(aggressor));
-        defender.setRole(new TotalRecall(defender));
+        aggressor.setScript(new TotalRecall(aggressor));
+        defender.setScript(new TotalRecall(defender));
         result.startNewGame();
         stopFlag = false;
         repeatGameFlag = true;
@@ -120,9 +159,9 @@ public class ActionField extends JPanel implements Runnable {
         } else {
             this.defender.installTank(battleField, x, y, Direction.TOP);
         }
-        this.defender.setRole(new ManualControl(this.defender));
+        this.defender.setScript(new ManualControl(this.defender));
         defender.setTarget(this.aggressor);
-        defender.getRole().installData();
+        defender.getScript().installData();
         if (defender.getDestroyableObst().contains("E")) {
             defender.getDestroyableObst().remove("E");
         }
@@ -135,17 +174,16 @@ public class ActionField extends JPanel implements Runnable {
         int vAggressor = battleField.getAggressorStartPosition()[0][0];
         int hAggressor = battleField.getAggressorStartPosition()[0][1];
 
-//        battleField.cleanQuadrant(vAggressor, hAggressor);
         int x = hAggressor * battleField.RECT_SIZE;
         int y = vAggressor * battleField.RECT_SIZE;
         if (this.aggressor == null) {
             this.aggressor = new BT7(battleField, x, y, Direction.TOP);
-            this.aggressor.setRole(new RandomTank(this.aggressor));
+            this.aggressor.setScript(new RandomTank(this.aggressor));
         } else {
             this.aggressor.installTank(battleField, x, y, Direction.TOP);
         }
         aggressor.setTarget(defender);
-        aggressor.getRole().installData();
+        aggressor.getScript().installData();
         aggressor.setDestroyed(false);
         aggressor.setStrRole("aggressor");
         aggressor.stopFlag = false;
@@ -261,6 +299,7 @@ public class ActionField extends JPanel implements Runnable {
                                 updateQueue();
                                 element = getQueueElement();
                                 if (element != null) {
+                                    System.out.println("Get queueActs element " +  element.getAct().toString());
                                     processAction(element.getAct(), element.getTank());
                                 }
                             }

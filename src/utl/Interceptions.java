@@ -1,13 +1,15 @@
 package utl;
 
-import missile.Bullet;
-import tanks.AbstractTank;
+import battle.Direction;
+import battle.missile.Bullet;
+import battle.tanks.AbstractTank;
 
 public class Interceptions {
 	
 	public Interceptions() {
 		
 	}
+
 	private static boolean verticalRegion(Bullet bt, AbstractTank target) {
 		
 		if (((bt.getX() + bt.BULLET_SIZE) > target.getX())
@@ -25,10 +27,11 @@ public class Interceptions {
 		return false;
 	}
 	
-	public static boolean targetExist(AbstractTank shooter, AbstractTank target) {
+	public static boolean targetExist(AbstractTank shooter, AbstractTank target, Direction dir) {
 
 		Bullet bt = new Bullet(shooter);
-		bt.setDirection(shooter.getDirection());
+//		bt.setDirection(shooter.getDirection());
+		bt.setDirection(dir);
 		bt.setX(0);
 		bt.setY(0);
 		bt.updateX(shooter.getX() + (target.TANK_SIZE - bt.BULLET_SIZE)/2);
@@ -94,5 +97,51 @@ public class Interceptions {
 		} else {
 			coord[0] += step;
 		}
-	}	
+	}
+
+	private static boolean verticalRegion(Bullet bt, int x) {
+
+		if (((bt.getX() + bt.BULLET_SIZE) > x)
+				&& (bt.getX() < (x + AbstractTank.TANK_SIZE))) {
+			return true;
+		}
+		return false;
+	}
+
+	private static boolean horizontalRegion(Bullet bt, int y) {
+		if (((bt.getY() + bt.BULLET_SIZE) > y)
+				&& (bt.getY() < (y + AbstractTank.TANK_SIZE))) {
+			return true;
+		}
+		return false;
+	}
+
+	public static boolean targetExist(AbstractTank shooter, int x, int y, Direction dir) {
+
+		Bullet bt = new Bullet(shooter);
+		bt.setDirection(dir);
+		bt.setX(0);
+		bt.setY(0);
+		bt.updateX(shooter.getX() + (shooter.TANK_SIZE - bt.BULLET_SIZE)/2);
+		bt.updateY(shooter.getY() + (shooter.TANK_SIZE - bt.BULLET_SIZE)/2);
+
+		if (bt.getDirection() == Direction.TOP) {
+			if(verticalRegion(bt,x) && bt.getY() > y) {
+				return true;
+			}
+		} else if (bt.getDirection() == Direction.BOTTOM ) {
+			if(verticalRegion(bt,x)&& bt.getY() < y) {
+				return true;
+			}
+		} else if (bt.getDirection() == Direction.LEFT) {
+			if(horizontalRegion(bt,y) && bt.getX() > x) {
+				return true;
+			}
+		} else {
+			if(horizontalRegion(bt,y) && bt.getX() < x) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

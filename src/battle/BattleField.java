@@ -10,8 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import landscape.*;
-import utl.Drawable;
+import battle.landscape.*;
 import utl.LoadPictures;
 
 public class BattleField implements Drawable {

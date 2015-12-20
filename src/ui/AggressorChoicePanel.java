@@ -16,7 +16,10 @@ public class AggressorChoicePanel extends JPanel {
     private String aggressorSelect;
     private JLabel picture;
     private String aggressorScript = "Random";
-
+    private JPanel radioPanel;
+    private JPanel behaviourAgrPanel;
+    private GUITools tools;
+    private JComponent[] components;
     private class RBListener implements ActionListener {
 
         @Override
@@ -43,7 +46,7 @@ public class AggressorChoicePanel extends JPanel {
         JLabel lProducts = new JLabel("CHOICE AGGRESSOR:");
         final ButtonGroup group = new ButtonGroup();
 
-        JPanel radioPanel = new JPanel();
+        radioPanel = new JPanel();
         radioPanel.setLayout(new GridLayout(3, 0));
         radioPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
         ActionListener rbListner = new RBListener();
@@ -73,7 +76,7 @@ public class AggressorChoicePanel extends JPanel {
         picture = new JLabel(createImageIcon(aggressorSelect + ".PNG"));
         picture.setPreferredSize(new Dimension(64, 64));
 
-        JPanel behaviourAgrPanel = new JPanel();
+        behaviourAgrPanel = new JPanel();
         behaviourAgrPanel.setLayout(new GridLayout(2, 0));
         behaviourAgrPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
         ActionListener baListner = new BAListener();
@@ -92,10 +95,24 @@ public class AggressorChoicePanel extends JPanel {
         ba2.setActionCommand("DestroyStaff");
         ba2.addActionListener(baListner);
 
+        JRadioButton ba3 = new JRadioButton("Hunter");
+        groupBA.add(ba3);
+        behaviourAgrPanel.add(ba3);
+        ba3.setActionCommand("Hunter");
+        ba3.addActionListener(baListner);
 
-        add(lProducts, new GridBagConstraints(0, 0, 1, 1, 0, 0,
+        JRadioButton ba4 = new JRadioButton("Manual Control");
+        groupBA.add(ba4);
+        behaviourAgrPanel.add(ba4);
+        ba4.setActionCommand("ManualControl");
+        ba4.addActionListener(baListner);
+
+        components = new JComponent[] {radioPanel,behaviourAgrPanel};
+        tools.makeSameHeight(components);
+
+        add(lProducts, new GridBagConstraints(1, 0, 1, 1, 0, 0,
                 GridBagConstraints.LINE_START, 0,
-                new Insets(0, 0, 0, 0), 0, 0));
+                new Insets(0, 5, 0, 0), 0, 0));
 
         add(radioPanel, new GridBagConstraints(0, 1, 1, 1, 0, 0,
                 GridBagConstraints.LINE_START, 0,
@@ -103,7 +120,7 @@ public class AggressorChoicePanel extends JPanel {
 
         add(behaviourAgrPanel, new GridBagConstraints(1, 1, 1, 1, 0, 0,
                 GridBagConstraints.LINE_START, 0,
-                new Insets(0, 0, 0, 0), 0, 0));
+                new Insets(0, 5, 0, 0), 0, 0));
 
         add(picture, new GridBagConstraints(2, 1, 1, 1, 0, 0,
                 GridBagConstraints.LINE_START, 0,

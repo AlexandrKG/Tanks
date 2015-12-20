@@ -9,20 +9,16 @@ import java.awt.event.ActionListener;
 import java.util.Observable;
 import java.util.Observer;
 
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.WindowConstants;
+import javax.swing.*;
 
-import tanks.AbstractTank;
-import tanks.BT7;
-import tanks.DestroyStaff;
-import tanks.RandomTank;
-import tanks.T34;
-import tanks.Tiger;
+import battle.tanks.AbstractTank;
+import battle.tanks.BT7;
+import battle.tanks.scripts.DestroyStaff;
+import battle.tanks.scripts.Hunter;
+import battle.tanks.scripts.ManualControl;
+import battle.tanks.scripts.RandomTank;
+import battle.tanks.T34;
+import battle.tanks.Tiger;
 import battle.ActionField;
 import battle.BattleField;
 
@@ -33,16 +29,21 @@ public class TanksUI implements Observer {
     private JPanel choicePanel;
     private DefenderChoicePanel defenderPanel;
     private AggressorChoicePanel aggressorPanel;
+    private JButton bPlay;
     private JPanel resultPanel;
     private ActionField af;
     private AbstractTank aggressor;
     private AbstractTank defender;
     private String aggressorScript = "Random";
+    private final JMenuItem mi = new JMenuItem("New Game");
+    private final JMenuItem ms = new JMenuItem("Stop Game");
+    private final JMenuItem ma = new JMenuItem("Select Game");
+    private final JMenuItem msh = new JMenuItem("Show Last Game");
 
     public TanksUI() throws Exception {
         this.af = null;
 
-        f = new JFrame("TANKS, CHOICE AGGRESSOR");
+        f = new JFrame("TANKS, CHOICE GAME");
         f.setLocation(300, 100);
         f.setMinimumSize(new Dimension(BattleField.BF_WIDTH,
                 BattleField.BF_HEIGHT + 60));
@@ -50,11 +51,6 @@ public class TanksUI implements Observer {
         f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         createChoicePanel();
         f.getContentPane().add(choicePanel);
-
-        final JMenuItem mi = new JMenuItem("New Game");
-        final JMenuItem ms = new JMenuItem("Stop Game");
-        final JMenuItem ma = new JMenuItem("Select aggressor");
-        final JMenuItem msh = new JMenuItem("Show Last Game");
 
         ms.setEnabled(false);
         ma.setEnabled(false);
@@ -69,7 +65,6 @@ public class TanksUI implements Observer {
             }
 
         });
-
 
         ms.addActionListener(new ActionListener() {
 
@@ -125,6 +120,17 @@ public class TanksUI implements Observer {
         choicePanel.setLayout(new GridBagLayout());
         aggressorPanel = new AggressorChoicePanel();
         defenderPanel = new DefenderChoicePanel();
+        bPlay = new JButton("PLAY");
+        bPlay.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                runNewGame();
+                mi.setEnabled(false);
+                ms.setEnabled(true);
+                ma.setEnabled(false);
+            }
+        });
+
         choicePanel
                 .add(defenderPanel, new GridBagConstraints(0, 0, 1, 1, 0, 0,
                         GridBagConstraints.LINE_START, 0,
@@ -132,8 +138,11 @@ public class TanksUI implements Observer {
         choicePanel
                 .add(aggressorPanel, new GridBagConstraints(0, 1, 1, 1, 0, 0,
                         GridBagConstraints.LINE_START, 0,
-                        new Insets(0, 0, 0, 0), 0, 0));
-
+                        new Insets(12, 0, 0, 0), 0, 0));
+        choicePanel
+                .add(bPlay, new GridBagConstraints(0, 2, 1, 1, 0, 0,
+                        GridBagConstraints.LINE_START, GridBagConstraints.HORIZONTAL,
+                        new Insets(12, 0, 0, 0), 0, 0));
     }
 
     private void createResultPanel(String res) {
@@ -203,9 +212,15 @@ public class TanksUI implements Observer {
 
         aggressorScript = aggressorPanel.getAggressorScript();
         if (aggressorScript.equals("Random")) {
-            aggressor.setRole(new RandomTank(aggressor));
+            aggressor.setScript(new RandomTank(aggressor));
+        } else if (aggressorScript.equals("DestroyStaff")){
+            aggressor.setScript(new DestroyStaff(aggressor));
+        } else if (aggressorScript.equals("Hunter")) {
+            aggressor.setScript(new Hunter(aggressor));
+        }  else if (aggressorScript.equals("ManualControl")) {
+            aggressor.setScript(new ManualControl(aggressor));
         } else {
-            aggressor.setRole(new DestroyStaff(aggressor));
+            aggressor.setScript(new RandomTank(aggressor));
         }
     }
 

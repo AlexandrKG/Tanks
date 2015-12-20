@@ -10,11 +10,12 @@ import java.io.OutputStreamWriter;
 import java.util.Arrays;
 
 import battle.ActionInQueue;
-import tanks.AbstractTank;
-import tanks.Action;
-import tanks.BT7;
-import tanks.T34;
-import tanks.Tiger;
+import battle.Direction;
+import battle.tanks.AbstractTank;
+import battle.tanks.Action;
+import battle.tanks.BT7;
+import battle.tanks.T34;
+import battle.tanks.Tiger;
 import battle.ActionField;
 import battle.BattleField;
 
