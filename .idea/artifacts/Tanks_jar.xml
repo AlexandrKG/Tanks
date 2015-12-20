@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" build-on-make="true" name="Tanks:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/Tanks_jar</output-path>
-    <root id="archive" name="Tanks.jar">
-      <element id="module-output" name="Tanks" />
-    </root>
-  </artifact>
-</component>
